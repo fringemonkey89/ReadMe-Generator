@@ -76,7 +76,7 @@ function init() {
     .prompt(questions)
     .then((answers) => {
       // Generate README content based on user's input
-      const readmeContent = generateReadmeContent(answers);
+      const readmeContent = generateMarkdown(answers);
      // Write README file
       writeToFile('README.md', readmeContent);
 
