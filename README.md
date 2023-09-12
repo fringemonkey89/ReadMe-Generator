@@ -1,7 +1,7 @@
 # Professional README Generator Starter Code
 
 ## Description
--A Node.js based tool where users can generate a read me for their repo projects.
+ A Node.js based tool where users can generate a read me for their repo projects.
 
 ## Usage
 - This application will allow users to create a README.md
@@ -16,7 +16,10 @@
 ## Screenshots
 
 ## Technologies Used
-
+- Node.js
+- NPM
+- Inquirer.js
 ## Contributers
 
 ## Link
+https://fringemonkey89.github.io/ReadMe-Generator/
