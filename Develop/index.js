@@ -156,7 +156,7 @@ function writeToFile(fileName, data) {
 // TODO: Create a function to initialize app
 function init() {
     return inquirer
-        .createPromptModule(questions)
+        .prompt(questions)
         .then(readMeData => {
             const {title} = readMeData
             return writeToFile(title, readMeData)
