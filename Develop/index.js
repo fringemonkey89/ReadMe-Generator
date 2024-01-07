@@ -4,35 +4,58 @@ const fs = require('fs');
 const generateMarkdown = require("./utils/generateMarkdown");
 const path = require("path");
 // TODO: Create an array of questions for user input
-const questions = [{
+const questions = [
+{
     type: 'input',
-    name: 'project',
-    message: 'What is the name of the project?',
+    name: 'title',
+    message: 'whats your project title?',
+    validate: title => {
+        if (title) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
 },
 {
     type: 'input',
     name: 'description',
-    message: 'Describe the application.',
+    message: 'Describe your project?',
+    validate: description => {
+        if (description) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
 },
 {
     type: 'input',
     name: 'installation',
     message: 'What are the installation instructions?',
+    validate: installation => {
+        if (installation) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
 },
 {
     type: 'input',
     name: 'usage',
     message: 'How do you use this app?',
-},
-{
-    type: 'input',
-    name: 'credits',
-    message: 'List any collaborators with their link, third party assets, tutorials, sources.',
-},
-{
-    type: "input",
-    message: "What is your email?",
-    name: "email"
+    validate: usage => {
+        if (usage) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
 },
 {
     type: 'list',
@@ -60,31 +83,87 @@ const questions = [{
 },
 {
     type: 'input',
+    name: 'contributing',
+    message: 'please inter the details for contributing to your project',
+    validate: contributing => {
+        if (contributing) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
+},
+{
+    type: 'input',
+    name: 'tests',
+    message: 'Please enter the details for testing your project',
+    validate: tests => {
+        if (tests) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
+},
+{
+    type: 'input',
     name: 'github',
     message: 'Leave a link to your Github page here.',
+    validate: github => {
+        if (github) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
 },
+{
+    type: "input",
+    message: "What is your email?",
+    name: "email",
+    validate: email => {
+        if (email) {
+            return true;
+        } else {
+            console.log('this is required');
+            return false;
+        }
+    }
+},
+
 ];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    return fs.writeFileSync(path.join(process.cwd(), fileName), data);
+    return new Promise ((resolve, reject) => {
+     fs.writeFile(`./dist/${fileName}.md`, generateMarkdown(data), err => {
+        if(err)  {
+            reject(err);
+            return
+        } else {
+            resolve({
+                ok: true,
+                message: 'README created'
+            })
+        }
+     })
+    })
 }
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer
-    .prompt(questions)
-    .then((answers) => {
-      // Generate README content based on user's input
-      const readmeContent = generateMarkdown(answers);
-     // Write README file
-      writeToFile('README.md', readmeContent);
-
-      console.log('README file generated successfully!');
-    })
-    .catch((error) => {
-      console.error('An error occurred:', error);
-    });
+    return inquirer
+        .createPromptModule(questions)
+        .then(readMeData => {
+            const {title} = readMeData
+            return writeToFile(title, readMeData)
+        })
+        .then(result => {
+            console.log(result);
+        })
 }
 
 // Function call to initialize app
